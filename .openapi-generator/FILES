@@ -23,7 +23,6 @@ docs/CreateCatalogRequest.md
 docs/CreateCatalogRoleRequest.md
 docs/CreatePrincipalRequest.md
 docs/CreatePrincipalRoleRequest.md
-docs/DefaultAPI.md
 docs/ExternalCatalog.md
 docs/FileStorageConfigInfo.md
 docs/GcpStorageConfigInfo.md
