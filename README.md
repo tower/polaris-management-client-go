@@ -23,7 +23,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import polarismgmt "github.com/GIT_USER_ID/GIT_REPO_ID"
+import polarismgmt "github.com/tower/polaris-management-client-go"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:

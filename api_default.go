@@ -20,12 +20,506 @@ import (
 )
 
 
+type DefaultAPI interface {
+
+	/*
+	AddGrantToCatalogRole Method for AddGrantToCatalogRole
+
+	Add a new grant to the catalog role
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog where the role will receive the grant
+	@param catalogRoleName The name of the role receiving the grant (must exist)
+	@return ApiAddGrantToCatalogRoleRequest
+	*/
+	AddGrantToCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiAddGrantToCatalogRoleRequest
+
+	// AddGrantToCatalogRoleExecute executes the request
+	AddGrantToCatalogRoleExecute(r ApiAddGrantToCatalogRoleRequest) (*http.Response, error)
+
+	/*
+	AssignCatalogRoleToPrincipalRole Method for AssignCatalogRoleToPrincipalRole
+
+	Assign a catalog role to a principal role
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@param catalogName The name of the catalog where the catalogRoles reside
+	@return ApiAssignCatalogRoleToPrincipalRoleRequest
+	*/
+	AssignCatalogRoleToPrincipalRole(ctx context.Context, principalRoleName string, catalogName string) ApiAssignCatalogRoleToPrincipalRoleRequest
+
+	// AssignCatalogRoleToPrincipalRoleExecute executes the request
+	AssignCatalogRoleToPrincipalRoleExecute(r ApiAssignCatalogRoleToPrincipalRoleRequest) (*http.Response, error)
+
+	/*
+	AssignPrincipalRole Method for AssignPrincipalRole
+
+	Add a role to the principal
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The name of the target principal
+	@return ApiAssignPrincipalRoleRequest
+	*/
+	AssignPrincipalRole(ctx context.Context, principalName string) ApiAssignPrincipalRoleRequest
+
+	// AssignPrincipalRoleExecute executes the request
+	AssignPrincipalRoleExecute(r ApiAssignPrincipalRoleRequest) (*http.Response, error)
+
+	/*
+	CreateCatalog Method for CreateCatalog
+
+	Add a new Catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCreateCatalogRequest
+	*/
+	CreateCatalog(ctx context.Context) ApiCreateCatalogRequest
+
+	// CreateCatalogExecute executes the request
+	//  @return Catalog
+	CreateCatalogExecute(r ApiCreateCatalogRequest) (*Catalog, *http.Response, error)
+
+	/*
+	CreateCatalogRole Method for CreateCatalogRole
+
+	Create a new role in the catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The catalog for which we are reading/updating roles
+	@return ApiCreateCatalogRoleRequest
+	*/
+	CreateCatalogRole(ctx context.Context, catalogName string) ApiCreateCatalogRoleRequest
+
+	// CreateCatalogRoleExecute executes the request
+	//  @return CatalogRole
+	CreateCatalogRoleExecute(r ApiCreateCatalogRoleRequest) (*CatalogRole, *http.Response, error)
+
+	/*
+	CreatePrincipal Method for CreatePrincipal
+
+	Create a principal
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCreatePrincipalRequest
+	*/
+	CreatePrincipal(ctx context.Context) ApiCreatePrincipalRequest
+
+	// CreatePrincipalExecute executes the request
+	//  @return PrincipalWithCredentials
+	CreatePrincipalExecute(r ApiCreatePrincipalRequest) (*PrincipalWithCredentials, *http.Response, error)
+
+	/*
+	CreatePrincipalRole Method for CreatePrincipalRole
+
+	Create a principal role
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCreatePrincipalRoleRequest
+	*/
+	CreatePrincipalRole(ctx context.Context) ApiCreatePrincipalRoleRequest
+
+	// CreatePrincipalRoleExecute executes the request
+	//  @return PrincipalRole
+	CreatePrincipalRoleExecute(r ApiCreatePrincipalRoleRequest) (*PrincipalRole, *http.Response, error)
+
+	/*
+	DeleteCatalog Method for DeleteCatalog
+
+	Delete an existing catalog. The catalog must be empty.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog
+	@return ApiDeleteCatalogRequest
+	*/
+	DeleteCatalog(ctx context.Context, catalogName string) ApiDeleteCatalogRequest
+
+	// DeleteCatalogExecute executes the request
+	DeleteCatalogExecute(r ApiDeleteCatalogRequest) (*http.Response, error)
+
+	/*
+	DeleteCatalogRole Method for DeleteCatalogRole
+
+	Delete an existing role from the catalog. All associated grants will also be deleted
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The catalog for which we are retrieving roles
+	@param catalogRoleName The name of the role
+	@return ApiDeleteCatalogRoleRequest
+	*/
+	DeleteCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiDeleteCatalogRoleRequest
+
+	// DeleteCatalogRoleExecute executes the request
+	DeleteCatalogRoleExecute(r ApiDeleteCatalogRoleRequest) (*http.Response, error)
+
+	/*
+	DeletePrincipal Method for DeletePrincipal
+
+	Remove a principal from polaris
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The principal name
+	@return ApiDeletePrincipalRequest
+	*/
+	DeletePrincipal(ctx context.Context, principalName string) ApiDeletePrincipalRequest
+
+	// DeletePrincipalExecute executes the request
+	DeletePrincipalExecute(r ApiDeletePrincipalRequest) (*http.Response, error)
+
+	/*
+	DeletePrincipalRole Method for DeletePrincipalRole
+
+	Remove a principal role from polaris
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@return ApiDeletePrincipalRoleRequest
+	*/
+	DeletePrincipalRole(ctx context.Context, principalRoleName string) ApiDeletePrincipalRoleRequest
+
+	// DeletePrincipalRoleExecute executes the request
+	DeletePrincipalRoleExecute(r ApiDeletePrincipalRoleRequest) (*http.Response, error)
+
+	/*
+	GetCatalog Method for GetCatalog
+
+	Get the details of a catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog
+	@return ApiGetCatalogRequest
+	*/
+	GetCatalog(ctx context.Context, catalogName string) ApiGetCatalogRequest
+
+	// GetCatalogExecute executes the request
+	//  @return Catalog
+	GetCatalogExecute(r ApiGetCatalogRequest) (*Catalog, *http.Response, error)
+
+	/*
+	GetCatalogRole Method for GetCatalogRole
+
+	Get the details of an existing role
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The catalog for which we are retrieving roles
+	@param catalogRoleName The name of the role
+	@return ApiGetCatalogRoleRequest
+	*/
+	GetCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiGetCatalogRoleRequest
+
+	// GetCatalogRoleExecute executes the request
+	//  @return CatalogRole
+	GetCatalogRoleExecute(r ApiGetCatalogRoleRequest) (*CatalogRole, *http.Response, error)
+
+	/*
+	GetPrincipal Method for GetPrincipal
+
+	Get the principal details
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The principal name
+	@return ApiGetPrincipalRequest
+	*/
+	GetPrincipal(ctx context.Context, principalName string) ApiGetPrincipalRequest
+
+	// GetPrincipalExecute executes the request
+	//  @return Principal
+	GetPrincipalExecute(r ApiGetPrincipalRequest) (*Principal, *http.Response, error)
+
+	/*
+	GetPrincipalRole Method for GetPrincipalRole
+
+	Get the principal role details
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@return ApiGetPrincipalRoleRequest
+	*/
+	GetPrincipalRole(ctx context.Context, principalRoleName string) ApiGetPrincipalRoleRequest
+
+	// GetPrincipalRoleExecute executes the request
+	//  @return PrincipalRole
+	GetPrincipalRoleExecute(r ApiGetPrincipalRoleRequest) (*PrincipalRole, *http.Response, error)
+
+	/*
+	ListAssigneePrincipalRolesForCatalogRole Method for ListAssigneePrincipalRolesForCatalogRole
+
+	List the PrincipalRoles to which the target catalog role has been assigned
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog where the catalog role resides
+	@param catalogRoleName The name of the catalog role
+	@return ApiListAssigneePrincipalRolesForCatalogRoleRequest
+	*/
+	ListAssigneePrincipalRolesForCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiListAssigneePrincipalRolesForCatalogRoleRequest
+
+	// ListAssigneePrincipalRolesForCatalogRoleExecute executes the request
+	//  @return PrincipalRoles
+	ListAssigneePrincipalRolesForCatalogRoleExecute(r ApiListAssigneePrincipalRolesForCatalogRoleRequest) (*PrincipalRoles, *http.Response, error)
+
+	/*
+	ListAssigneePrincipalsForPrincipalRole Method for ListAssigneePrincipalsForPrincipalRole
+
+	List the Principals to whom the target principal role has been assigned
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@return ApiListAssigneePrincipalsForPrincipalRoleRequest
+	*/
+	ListAssigneePrincipalsForPrincipalRole(ctx context.Context, principalRoleName string) ApiListAssigneePrincipalsForPrincipalRoleRequest
+
+	// ListAssigneePrincipalsForPrincipalRoleExecute executes the request
+	//  @return Principals
+	ListAssigneePrincipalsForPrincipalRoleExecute(r ApiListAssigneePrincipalsForPrincipalRoleRequest) (*Principals, *http.Response, error)
+
+	/*
+	ListCatalogRoles Method for ListCatalogRoles
+
+	List existing roles in the catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The catalog for which we are reading/updating roles
+	@return ApiListCatalogRolesRequest
+	*/
+	ListCatalogRoles(ctx context.Context, catalogName string) ApiListCatalogRolesRequest
+
+	// ListCatalogRolesExecute executes the request
+	//  @return CatalogRoles
+	ListCatalogRolesExecute(r ApiListCatalogRolesRequest) (*CatalogRoles, *http.Response, error)
+
+	/*
+	ListCatalogRolesForPrincipalRole Method for ListCatalogRolesForPrincipalRole
+
+	Get the catalog roles mapped to the principal role
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@param catalogName The name of the catalog where the catalogRoles reside
+	@return ApiListCatalogRolesForPrincipalRoleRequest
+	*/
+	ListCatalogRolesForPrincipalRole(ctx context.Context, principalRoleName string, catalogName string) ApiListCatalogRolesForPrincipalRoleRequest
+
+	// ListCatalogRolesForPrincipalRoleExecute executes the request
+	//  @return CatalogRoles
+	ListCatalogRolesForPrincipalRoleExecute(r ApiListCatalogRolesForPrincipalRoleRequest) (*CatalogRoles, *http.Response, error)
+
+	/*
+	ListCatalogs Method for ListCatalogs
+
+	List all catalogs in this polaris service
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListCatalogsRequest
+	*/
+	ListCatalogs(ctx context.Context) ApiListCatalogsRequest
+
+	// ListCatalogsExecute executes the request
+	//  @return Catalogs
+	ListCatalogsExecute(r ApiListCatalogsRequest) (*Catalogs, *http.Response, error)
+
+	/*
+	ListGrantsForCatalogRole Method for ListGrantsForCatalogRole
+
+	List the grants the catalog role holds
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog where the role will receive the grant
+	@param catalogRoleName The name of the role receiving the grant (must exist)
+	@return ApiListGrantsForCatalogRoleRequest
+	*/
+	ListGrantsForCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiListGrantsForCatalogRoleRequest
+
+	// ListGrantsForCatalogRoleExecute executes the request
+	//  @return GrantResources
+	ListGrantsForCatalogRoleExecute(r ApiListGrantsForCatalogRoleRequest) (*GrantResources, *http.Response, error)
+
+	/*
+	ListPrincipalRoles Method for ListPrincipalRoles
+
+	List the principal roles
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListPrincipalRolesRequest
+	*/
+	ListPrincipalRoles(ctx context.Context) ApiListPrincipalRolesRequest
+
+	// ListPrincipalRolesExecute executes the request
+	//  @return PrincipalRoles
+	ListPrincipalRolesExecute(r ApiListPrincipalRolesRequest) (*PrincipalRoles, *http.Response, error)
+
+	/*
+	ListPrincipalRolesAssigned Method for ListPrincipalRolesAssigned
+
+	List the roles assigned to the principal
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The name of the target principal
+	@return ApiListPrincipalRolesAssignedRequest
+	*/
+	ListPrincipalRolesAssigned(ctx context.Context, principalName string) ApiListPrincipalRolesAssignedRequest
+
+	// ListPrincipalRolesAssignedExecute executes the request
+	//  @return PrincipalRoles
+	ListPrincipalRolesAssignedExecute(r ApiListPrincipalRolesAssignedRequest) (*PrincipalRoles, *http.Response, error)
+
+	/*
+	ListPrincipals Method for ListPrincipals
+
+	List the principals for the current catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListPrincipalsRequest
+	*/
+	ListPrincipals(ctx context.Context) ApiListPrincipalsRequest
+
+	// ListPrincipalsExecute executes the request
+	//  @return Principals
+	ListPrincipalsExecute(r ApiListPrincipalsRequest) (*Principals, *http.Response, error)
+
+	/*
+	ResetCredentials Method for ResetCredentials
+
+	Reset a principal's credentials to a new set. By default, the system generates random credentials unless explicitly allowed to accept user-provided credentials via configuration.   This API is *not* idempotent and will return the newly created credentials.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The principal's name
+	@return ApiResetCredentialsRequest
+	*/
+	ResetCredentials(ctx context.Context, principalName string) ApiResetCredentialsRequest
+
+	// ResetCredentialsExecute executes the request
+	//  @return PrincipalWithCredentials
+	ResetCredentialsExecute(r ApiResetCredentialsRequest) (*PrincipalWithCredentials, *http.Response, error)
+
+	/*
+	RevokeCatalogRoleFromPrincipalRole Method for RevokeCatalogRoleFromPrincipalRole
+
+	Remove a catalog role from a principal role
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@param catalogName The name of the catalog that contains the role to revoke
+	@param catalogRoleName The name of the catalog role that should be revoked
+	@return ApiRevokeCatalogRoleFromPrincipalRoleRequest
+	*/
+	RevokeCatalogRoleFromPrincipalRole(ctx context.Context, principalRoleName string, catalogName string, catalogRoleName string) ApiRevokeCatalogRoleFromPrincipalRoleRequest
+
+	// RevokeCatalogRoleFromPrincipalRoleExecute executes the request
+	RevokeCatalogRoleFromPrincipalRoleExecute(r ApiRevokeCatalogRoleFromPrincipalRoleRequest) (*http.Response, error)
+
+	/*
+	RevokeGrantFromCatalogRole Method for RevokeGrantFromCatalogRole
+
+	Delete a specific grant from the role. This may be a subset or a superset of the grants the role has. In case of a subset, the role will retain the grants not specified. If the `cascade` parameter is true, grant revocation will have a cascading effect - that is, if a principal has specific grants on a subresource, and grants are revoked on a parent resource, the grants present on the subresource will be revoked as well. By default, this behavior is disabled and grant revocation only affects the specified resource.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog where the role will receive the grant
+	@param catalogRoleName The name of the role receiving the grant (must exist)
+	@return ApiRevokeGrantFromCatalogRoleRequest
+	*/
+	RevokeGrantFromCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiRevokeGrantFromCatalogRoleRequest
+
+	// RevokeGrantFromCatalogRoleExecute executes the request
+	RevokeGrantFromCatalogRoleExecute(r ApiRevokeGrantFromCatalogRoleRequest) (*http.Response, error)
+
+	/*
+	RevokePrincipalRole Method for RevokePrincipalRole
+
+	Remove a role from a catalog principal
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The name of the target principal
+	@param principalRoleName The name of the role
+	@return ApiRevokePrincipalRoleRequest
+	*/
+	RevokePrincipalRole(ctx context.Context, principalName string, principalRoleName string) ApiRevokePrincipalRoleRequest
+
+	// RevokePrincipalRoleExecute executes the request
+	RevokePrincipalRoleExecute(r ApiRevokePrincipalRoleRequest) (*http.Response, error)
+
+	/*
+	RotateCredentials Method for RotateCredentials
+
+	Rotate a principal's credentials. The new credentials will be returned in the response. This is the only API, aside from createPrincipal, that returns the user's credentials. This API is *not* idempotent.
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The user name
+	@return ApiRotateCredentialsRequest
+	*/
+	RotateCredentials(ctx context.Context, principalName string) ApiRotateCredentialsRequest
+
+	// RotateCredentialsExecute executes the request
+	//  @return PrincipalWithCredentials
+	RotateCredentialsExecute(r ApiRotateCredentialsRequest) (*PrincipalWithCredentials, *http.Response, error)
+
+	/*
+	UpdateCatalog Method for UpdateCatalog
+
+	Update an existing catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The name of the catalog
+	@return ApiUpdateCatalogRequest
+	*/
+	UpdateCatalog(ctx context.Context, catalogName string) ApiUpdateCatalogRequest
+
+	// UpdateCatalogExecute executes the request
+	//  @return Catalog
+	UpdateCatalogExecute(r ApiUpdateCatalogRequest) (*Catalog, *http.Response, error)
+
+	/*
+	UpdateCatalogRole Method for UpdateCatalogRole
+
+	Update an existing role in the catalog
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param catalogName The catalog for which we are retrieving roles
+	@param catalogRoleName The name of the role
+	@return ApiUpdateCatalogRoleRequest
+	*/
+	UpdateCatalogRole(ctx context.Context, catalogName string, catalogRoleName string) ApiUpdateCatalogRoleRequest
+
+	// UpdateCatalogRoleExecute executes the request
+	//  @return CatalogRole
+	UpdateCatalogRoleExecute(r ApiUpdateCatalogRoleRequest) (*CatalogRole, *http.Response, error)
+
+	/*
+	UpdatePrincipal Method for UpdatePrincipal
+
+	Update an existing principal
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalName The principal name
+	@return ApiUpdatePrincipalRequest
+	*/
+	UpdatePrincipal(ctx context.Context, principalName string) ApiUpdatePrincipalRequest
+
+	// UpdatePrincipalExecute executes the request
+	//  @return Principal
+	UpdatePrincipalExecute(r ApiUpdatePrincipalRequest) (*Principal, *http.Response, error)
+
+	/*
+	UpdatePrincipalRole Method for UpdatePrincipalRole
+
+	Update an existing principalRole
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@param principalRoleName The principal role name
+	@return ApiUpdatePrincipalRoleRequest
+	*/
+	UpdatePrincipalRole(ctx context.Context, principalRoleName string) ApiUpdatePrincipalRoleRequest
+
+	// UpdatePrincipalRoleExecute executes the request
+	//  @return PrincipalRole
+	UpdatePrincipalRoleExecute(r ApiUpdatePrincipalRoleRequest) (*PrincipalRole, *http.Response, error)
+}
+
 // DefaultAPIService DefaultAPI service
 type DefaultAPIService service
 
 type ApiAddGrantToCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 	addGrantRequest *AddGrantRequest
@@ -141,7 +635,7 @@ func (a *DefaultAPIService) AddGrantToCatalogRoleExecute(r ApiAddGrantToCatalogR
 
 type ApiAssignCatalogRoleToPrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 	catalogName string
 	grantCatalogRoleRequest *GrantCatalogRoleRequest
@@ -261,7 +755,7 @@ func (a *DefaultAPIService) AssignCatalogRoleToPrincipalRoleExecute(r ApiAssignC
 
 type ApiAssignPrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 	grantPrincipalRoleRequest *GrantPrincipalRoleRequest
 }
@@ -371,7 +865,7 @@ func (a *DefaultAPIService) AssignPrincipalRoleExecute(r ApiAssignPrincipalRoleR
 
 type ApiCreateCatalogRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	createCatalogRequest *CreateCatalogRequest
 }
 
@@ -482,7 +976,7 @@ func (a *DefaultAPIService) CreateCatalogExecute(r ApiCreateCatalogRequest) (*Ca
 
 type ApiCreateCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	createCatalogRoleRequest *CreateCatalogRoleRequest
 }
@@ -599,7 +1093,7 @@ func (a *DefaultAPIService) CreateCatalogRoleExecute(r ApiCreateCatalogRoleReque
 
 type ApiCreatePrincipalRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	createPrincipalRequest *CreatePrincipalRequest
 }
 
@@ -710,7 +1204,7 @@ func (a *DefaultAPIService) CreatePrincipalExecute(r ApiCreatePrincipalRequest) 
 
 type ApiCreatePrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	createPrincipalRoleRequest *CreatePrincipalRoleRequest
 }
 
@@ -821,7 +1315,7 @@ func (a *DefaultAPIService) CreatePrincipalRoleExecute(r ApiCreatePrincipalRoleR
 
 type ApiDeleteCatalogRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 }
 
@@ -919,7 +1413,7 @@ func (a *DefaultAPIService) DeleteCatalogExecute(r ApiDeleteCatalogRequest) (*ht
 
 type ApiDeleteCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 }
@@ -1027,7 +1521,7 @@ func (a *DefaultAPIService) DeleteCatalogRoleExecute(r ApiDeleteCatalogRoleReque
 
 type ApiDeletePrincipalRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 }
 
@@ -1125,7 +1619,7 @@ func (a *DefaultAPIService) DeletePrincipalExecute(r ApiDeletePrincipalRequest) 
 
 type ApiDeletePrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 }
 
@@ -1223,7 +1717,7 @@ func (a *DefaultAPIService) DeletePrincipalRoleExecute(r ApiDeletePrincipalRoleR
 
 type ApiGetCatalogRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 }
 
@@ -1332,7 +1826,7 @@ func (a *DefaultAPIService) GetCatalogExecute(r ApiGetCatalogRequest) (*Catalog,
 
 type ApiGetCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 }
@@ -1451,7 +1945,7 @@ func (a *DefaultAPIService) GetCatalogRoleExecute(r ApiGetCatalogRoleRequest) (*
 
 type ApiGetPrincipalRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 }
 
@@ -1560,7 +2054,7 @@ func (a *DefaultAPIService) GetPrincipalExecute(r ApiGetPrincipalRequest) (*Prin
 
 type ApiGetPrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 }
 
@@ -1669,7 +2163,7 @@ func (a *DefaultAPIService) GetPrincipalRoleExecute(r ApiGetPrincipalRoleRequest
 
 type ApiListAssigneePrincipalRolesForCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 }
@@ -1788,7 +2282,7 @@ func (a *DefaultAPIService) ListAssigneePrincipalRolesForCatalogRoleExecute(r Ap
 
 type ApiListAssigneePrincipalsForPrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 }
 
@@ -1897,7 +2391,7 @@ func (a *DefaultAPIService) ListAssigneePrincipalsForPrincipalRoleExecute(r ApiL
 
 type ApiListCatalogRolesRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 }
 
@@ -2006,7 +2500,7 @@ func (a *DefaultAPIService) ListCatalogRolesExecute(r ApiListCatalogRolesRequest
 
 type ApiListCatalogRolesForPrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 	catalogName string
 }
@@ -2125,7 +2619,7 @@ func (a *DefaultAPIService) ListCatalogRolesForPrincipalRoleExecute(r ApiListCat
 
 type ApiListCatalogsRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 }
 
 func (r ApiListCatalogsRequest) Execute() (*Catalogs, *http.Response, error) {
@@ -2224,7 +2718,7 @@ func (a *DefaultAPIService) ListCatalogsExecute(r ApiListCatalogsRequest) (*Cata
 
 type ApiListGrantsForCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 }
@@ -2343,7 +2837,7 @@ func (a *DefaultAPIService) ListGrantsForCatalogRoleExecute(r ApiListGrantsForCa
 
 type ApiListPrincipalRolesRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 }
 
 func (r ApiListPrincipalRolesRequest) Execute() (*PrincipalRoles, *http.Response, error) {
@@ -2442,7 +2936,7 @@ func (a *DefaultAPIService) ListPrincipalRolesExecute(r ApiListPrincipalRolesReq
 
 type ApiListPrincipalRolesAssignedRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 }
 
@@ -2551,7 +3045,7 @@ func (a *DefaultAPIService) ListPrincipalRolesAssignedExecute(r ApiListPrincipal
 
 type ApiListPrincipalsRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 }
 
 func (r ApiListPrincipalsRequest) Execute() (*Principals, *http.Response, error) {
@@ -2650,7 +3144,7 @@ func (a *DefaultAPIService) ListPrincipalsExecute(r ApiListPrincipalsRequest) (*
 
 type ApiResetCredentialsRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 	resetPrincipalRequest *ResetPrincipalRequest
 }
@@ -2767,7 +3261,7 @@ func (a *DefaultAPIService) ResetCredentialsExecute(r ApiResetCredentialsRequest
 
 type ApiRevokeCatalogRoleFromPrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 	catalogName string
 	catalogRoleName string
@@ -2885,7 +3379,7 @@ func (a *DefaultAPIService) RevokeCatalogRoleFromPrincipalRoleExecute(r ApiRevok
 
 type ApiRevokeGrantFromCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 	cascade *bool
@@ -3015,7 +3509,7 @@ func (a *DefaultAPIService) RevokeGrantFromCatalogRoleExecute(r ApiRevokeGrantFr
 
 type ApiRevokePrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 	principalRoleName string
 }
@@ -3123,7 +3617,7 @@ func (a *DefaultAPIService) RevokePrincipalRoleExecute(r ApiRevokePrincipalRoleR
 
 type ApiRotateCredentialsRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 }
 
@@ -3232,7 +3726,7 @@ func (a *DefaultAPIService) RotateCredentialsExecute(r ApiRotateCredentialsReque
 
 type ApiUpdateCatalogRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	updateCatalogRequest *UpdateCatalogRequest
 }
@@ -3353,7 +3847,7 @@ func (a *DefaultAPIService) UpdateCatalogExecute(r ApiUpdateCatalogRequest) (*Ca
 
 type ApiUpdateCatalogRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	catalogName string
 	catalogRoleName string
 	updateCatalogRoleRequest *UpdateCatalogRoleRequest
@@ -3480,7 +3974,7 @@ func (a *DefaultAPIService) UpdateCatalogRoleExecute(r ApiUpdateCatalogRoleReque
 
 type ApiUpdatePrincipalRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalName string
 	updatePrincipalRequest *UpdatePrincipalRequest
 }
@@ -3601,7 +4095,7 @@ func (a *DefaultAPIService) UpdatePrincipalExecute(r ApiUpdatePrincipalRequest) 
 
 type ApiUpdatePrincipalRoleRequest struct {
 	ctx context.Context
-	ApiService *DefaultAPIService
+	ApiService DefaultAPI
 	principalRoleName string
 	updatePrincipalRoleRequest *UpdatePrincipalRoleRequest
 }

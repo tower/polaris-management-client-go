@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -119,5 +118,4 @@ model_update_principal_role_request.go
 model_view_grant.go
 model_view_privilege.go
 response.go
-test/api_default_test.go
 utils.go

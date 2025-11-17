@@ -13,8 +13,8 @@ import (
 	"context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	openapiclient "github.com/tower/polaris-management-client-go"
 	"testing"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
 func Test_polarismgmt_DefaultAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService AddGrantToCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -38,7 +38,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService AssignCatalogRoleToPrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 		var catalogName string
@@ -52,7 +52,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService AssignPrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -65,7 +65,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService CreateCatalog", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.CreateCatalog(context.Background()).Execute()
 
@@ -77,7 +77,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService CreateCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 
@@ -91,7 +91,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService CreatePrincipal", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.CreatePrincipal(context.Background()).Execute()
 
@@ -103,7 +103,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService CreatePrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.CreatePrincipalRole(context.Background()).Execute()
 
@@ -115,7 +115,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService DeleteCatalog", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 
@@ -128,7 +128,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService DeleteCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -142,7 +142,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService DeletePrincipal", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -155,7 +155,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService DeletePrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 
@@ -168,7 +168,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService GetCatalog", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 
@@ -182,7 +182,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService GetCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -197,7 +197,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService GetPrincipal", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -211,7 +211,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService GetPrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 
@@ -225,7 +225,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListAssigneePrincipalRolesForCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -240,7 +240,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListAssigneePrincipalsForPrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 
@@ -254,7 +254,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListCatalogRoles", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 
@@ -268,7 +268,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListCatalogRolesForPrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 		var catalogName string
@@ -283,7 +283,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListCatalogs", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.ListCatalogs(context.Background()).Execute()
 
@@ -295,7 +295,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListGrantsForCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -310,7 +310,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListPrincipalRoles", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.ListPrincipalRoles(context.Background()).Execute()
 
@@ -322,7 +322,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListPrincipalRolesAssigned", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -336,7 +336,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ListPrincipals", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.ListPrincipals(context.Background()).Execute()
 
@@ -348,7 +348,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService ResetCredentials", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -362,7 +362,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService RevokeCatalogRoleFromPrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 		var catalogName string
@@ -377,7 +377,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService RevokeGrantFromCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -391,7 +391,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService RevokePrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 		var principalRoleName string
@@ -405,7 +405,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService RotateCredentials", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -419,7 +419,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService UpdateCatalog", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 
@@ -433,7 +433,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService UpdateCatalogRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var catalogName string
 		var catalogRoleName string
@@ -448,7 +448,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService UpdatePrincipal", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalName string
 
@@ -462,7 +462,7 @@ func Test_polarismgmt_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService UpdatePrincipalRole", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		var principalRoleName string
 
