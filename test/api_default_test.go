@@ -15,7 +15,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	openapiclient "github.com/tower/polaris-management-client-go"
+	openapiclient "github.com/tower/polaris-management-go"
 )
 
 func Test_polarismgmt_DefaultAPIService(t *testing.T) {

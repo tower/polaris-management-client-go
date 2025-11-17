@@ -24,11 +24,11 @@ import (
 
 const (
 	packageName   = "polarismgmt"
-	goModuleName  = "github.com/tower/polaris-management-client-go"
+	goModuleName  = "github.com/tower/polaris-management-go"
 	specFile      = "polaris-management-service.yml"
 	generator     = "go"
 	oldImportPath = "GIT_USER_ID/GIT_REPO_ID"
-	newImportPath = "tower/polaris-management-client-go"
+	newImportPath = "tower/polaris-management-go"
 )
 
 func main() {
@@ -74,7 +74,7 @@ func run() error {
 
 	fmt.Println("\nGeneration complete!")
 
-	// Post-process: Replace tower/polaris-management-client-go with the correct path
+	// Post-process: Replace tower/polaris-management-go with the correct path
 	fmt.Println("\nPost-processing generated files...")
 	if err := replaceImportPaths(projectRoot); err != nil {
 		return fmt.Errorf("failed to replace import paths: %w", err)

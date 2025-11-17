@@ -1,4 +1,4 @@
-module github.com/tower/polaris-management-client-go
+module github.com/tower/polaris-management-go
 
 go 1.23.0
 

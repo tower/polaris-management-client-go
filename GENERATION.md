@@ -68,7 +68,7 @@ The generator creates/updates:
 The generation configuration is defined in `tools/generate.go`:
 
 - **Package name**: `polarismgmt`
-- **Go module**: `github.com/tower/polaris-management-client-go`
+- **Go module**: `github.com/tower/polaris-management-go`
 - **Generator**: `go` (OpenAPI Generator's Go client generator)
 - **Additional properties**:
   - `generateInterfaces=true` - Generate interfaces for API clients
@@ -108,7 +108,7 @@ If tests fail during generation, the script will stop and show the error. Fix th
 
 ### Import Path Issues
 
-If you see import errors related to `GIT_USER_ID/GIT_REPO_ID`, ensure the post-processing step in `tools/generate.go` is working correctly. The script should automatically replace these placeholders with `tower/polaris-management-client-go`.
+If you see import errors related to `GIT_USER_ID/GIT_REPO_ID`, ensure the post-processing step in `tools/generate.go` is working correctly. The script should automatically replace these placeholders with `tower/polaris-management-go`.
 
 ## Manual Generation (Not Recommended)
 
@@ -126,12 +126,12 @@ packageName=polarismgmt,\
 enumClassPrefix=true,\
 disallowAdditionalPropertiesIfNotPresent=false,\
 withGoMod=true,\
-goModuleName=github.com/tower/polaris-management-client-go,\
+goModuleName=github.com/tower/polaris-management-go,\
 isGoSubmodule=false,\
 hideGenerationTimestamp=true
 
 # Fix import paths manually (find/replace in all .go files)
-# GIT_USER_ID/GIT_REPO_ID -> tower/polaris-management-client-go
+# GIT_USER_ID/GIT_REPO_ID -> tower/polaris-management-go
 
 # Install dependencies
 go get github.com/stretchr/testify/assert@latest
