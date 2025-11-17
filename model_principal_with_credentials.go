@@ -20,8 +20,8 @@ var _ MappedNullable = &PrincipalWithCredentials{}
 
 // PrincipalWithCredentials A user with its client id and secret. This type is returned when a new principal is created or when its credentials are rotated
 type PrincipalWithCredentials struct {
-	Principal Principal `json:"principal"`
-	Credentials PrincipalWithCredentialsCredentials `json:"credentials"`
+	Principal            Principal                           `json:"principal"`
+	Credentials          PrincipalWithCredentialsCredentials `json:"credentials"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -95,7 +95,7 @@ func (o *PrincipalWithCredentials) SetCredentials(v PrincipalWithCredentialsCred
 }
 
 func (o PrincipalWithCredentials) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -128,10 +128,10 @@ func (o *PrincipalWithCredentials) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -193,5 +193,3 @@ func (v *NullablePrincipalWithCredentials) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

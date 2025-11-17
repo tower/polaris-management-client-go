@@ -65,9 +65,9 @@ type ServerVariable struct {
 
 // ServerConfiguration stores the information about a server
 type ServerConfiguration struct {
-	URL string
+	URL         string
 	Description string
-	Variables map[string]ServerVariable
+	Variables   map[string]ServerVariable
 }
 
 // ServerConfigurations stores multiple ServerConfiguration items
@@ -88,27 +88,26 @@ type Configuration struct {
 // NewConfiguration returns a new Configuration object
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
-		DefaultHeader:    make(map[string]string),
-		UserAgent:        "OpenAPI-Generator/1.0.0/go",
-		Debug:            false,
-		Servers:          ServerConfigurations{
+		DefaultHeader: make(map[string]string),
+		UserAgent:     "OpenAPI-Generator/1.0.0/go",
+		Debug:         false,
+		Servers: ServerConfigurations{
 			{
-				URL: "{scheme}://{host}/api/management/v1",
+				URL:         "{scheme}://{host}/api/management/v1",
 				Description: "Server URL when the port can be inferred from the scheme",
 				Variables: map[string]ServerVariable{
 					"scheme": ServerVariable{
-						Description: "The scheme of the URI, either http or https.",
+						Description:  "The scheme of the URI, either http or https.",
 						DefaultValue: "https",
 					},
 					"host": ServerVariable{
-						Description: "The host address for the specified server",
+						Description:  "The host address for the specified server",
 						DefaultValue: "localhost",
 					},
 				},
 			},
 		},
-		OperationServers: map[string]ServerConfigurations{
-		},
+		OperationServers: map[string]ServerConfigurations{},
 	}
 	return cfg
 }

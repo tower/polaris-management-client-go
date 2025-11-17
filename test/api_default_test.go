@@ -11,10 +11,11 @@ package polarismgmt
 
 import (
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	openapiclient "github.com/tower/polaris-management-client-go"
-	"testing"
 )
 
 func Test_polarismgmt_DefaultAPIService(t *testing.T) {

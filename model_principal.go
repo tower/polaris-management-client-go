@@ -22,12 +22,12 @@ var _ MappedNullable = &Principal{}
 type Principal struct {
 	Name string `json:"name" validate:"regexp=^(?!\\\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\\\$).*$"`
 	// The output-only OAuth clientId associated with this principal if applicable
-	ClientId *string `json:"clientId,omitempty"`
-	Properties *map[string]string `json:"properties,omitempty"`
-	CreateTimestamp *int64 `json:"createTimestamp,omitempty"`
-	LastUpdateTimestamp *int64 `json:"lastUpdateTimestamp,omitempty"`
+	ClientId            *string            `json:"clientId,omitempty"`
+	Properties          *map[string]string `json:"properties,omitempty"`
+	CreateTimestamp     *int64             `json:"createTimestamp,omitempty"`
+	LastUpdateTimestamp *int64             `json:"lastUpdateTimestamp,omitempty"`
 	// The version of the principal object used to determine if the principal metadata has changed
-	EntityVersion *int32 `json:"entityVersion,omitempty"`
+	EntityVersion        *int32 `json:"entityVersion,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -236,7 +236,7 @@ func (o *Principal) SetEntityVersion(v int32) {
 }
 
 func (o Principal) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -282,10 +282,10 @@ func (o *Principal) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -351,5 +351,3 @@ func (v *NullablePrincipal) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

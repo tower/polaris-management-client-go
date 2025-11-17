@@ -23,15 +23,15 @@ type Catalog struct {
 	// the type of catalog - internal or external
 	Type string `json:"type"`
 	// The name of the catalog
-	Name string `json:"name" validate:"regexp=^(?!\\\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\\\$).*$"`
+	Name       string            `json:"name" validate:"regexp=^(?!\\\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\\\$).*$"`
 	Properties CatalogProperties `json:"properties"`
 	// The creation time represented as unix epoch timestamp in milliseconds
 	CreateTimestamp *int64 `json:"createTimestamp,omitempty"`
 	// The last update time represented as unix epoch timestamp in milliseconds
 	LastUpdateTimestamp *int64 `json:"lastUpdateTimestamp,omitempty"`
 	// The version of the catalog object used to determine if the catalog metadata has changed
-	EntityVersion *int32 `json:"entityVersion,omitempty"`
-	StorageConfigInfo StorageConfigInfo `json:"storageConfigInfo"`
+	EntityVersion        *int32            `json:"entityVersion,omitempty"`
+	StorageConfigInfo    StorageConfigInfo `json:"storageConfigInfo"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -253,7 +253,7 @@ func (o *Catalog) SetStorageConfigInfo(v StorageConfigInfo) {
 }
 
 func (o Catalog) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -299,10 +299,10 @@ func (o *Catalog) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -369,5 +369,3 @@ func (v *NullableCatalog) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

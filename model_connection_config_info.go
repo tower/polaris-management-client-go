@@ -23,10 +23,10 @@ type ConnectionConfigInfo struct {
 	// The type of remote catalog service represented by this connection
 	ConnectionType string `json:"connectionType"`
 	// URI to the remote catalog service
-	Uri *string `json:"uri,omitempty"`
+	Uri                      *string                   `json:"uri,omitempty"`
 	AuthenticationParameters *AuthenticationParameters `json:"authenticationParameters,omitempty"`
-	ServiceIdentity *ServiceIdentityInfo `json:"serviceIdentity,omitempty"`
-	AdditionalProperties map[string]interface{}
+	ServiceIdentity          *ServiceIdentityInfo      `json:"serviceIdentity,omitempty"`
+	AdditionalProperties     map[string]interface{}
 }
 
 type _ConnectionConfigInfo ConnectionConfigInfo
@@ -170,7 +170,7 @@ func (o *ConnectionConfigInfo) SetServiceIdentity(v ServiceIdentityInfo) {
 }
 
 func (o ConnectionConfigInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -210,10 +210,10 @@ func (o *ConnectionConfigInfo) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -277,5 +277,3 @@ func (v *NullableConnectionConfigInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

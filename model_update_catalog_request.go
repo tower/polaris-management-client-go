@@ -20,9 +20,9 @@ var _ MappedNullable = &UpdateCatalogRequest{}
 // UpdateCatalogRequest Updates to apply to a Catalog. Any fields which are required in the Catalog will remain unaltered if omitted from the contents of this Update request.
 type UpdateCatalogRequest struct {
 	// The version of the object onto which this update is applied; if the object changed, the update will fail and the caller should retry after fetching the latest version.
-	CurrentEntityVersion *int32 `json:"currentEntityVersion,omitempty"`
-	Properties *map[string]string `json:"properties,omitempty"`
-	StorageConfigInfo *StorageConfigInfo `json:"storageConfigInfo,omitempty"`
+	CurrentEntityVersion *int32             `json:"currentEntityVersion,omitempty"`
+	Properties           *map[string]string `json:"properties,omitempty"`
+	StorageConfigInfo    *StorageConfigInfo `json:"storageConfigInfo,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -142,7 +142,7 @@ func (o *UpdateCatalogRequest) SetStorageConfigInfo(v StorageConfigInfo) {
 }
 
 func (o UpdateCatalogRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -226,5 +226,3 @@ func (v *NullableUpdateCatalogRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

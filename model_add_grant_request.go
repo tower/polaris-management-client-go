@@ -19,7 +19,7 @@ var _ MappedNullable = &AddGrantRequest{}
 
 // AddGrantRequest struct for AddGrantRequest
 type AddGrantRequest struct {
-	Grant *GrantResource `json:"grant,omitempty"`
+	Grant                *GrantResource `json:"grant,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -75,7 +75,7 @@ func (o *AddGrantRequest) SetGrant(v GrantResource) {
 }
 
 func (o AddGrantRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -151,5 +151,3 @@ func (v *NullableAddGrantRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

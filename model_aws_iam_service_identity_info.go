@@ -22,7 +22,7 @@ var _ MappedNullable = &AwsIamServiceIdentityInfo{}
 type AwsIamServiceIdentityInfo struct {
 	ServiceIdentityInfo
 	// The ARN of the IAM user or IAM role Polaris uses to assume roles and then access external resources.
-	IamArn string `json:"iamArn"`
+	IamArn               string `json:"iamArn"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -72,7 +72,7 @@ func (o *AwsIamServiceIdentityInfo) SetIamArn(v string) {
 }
 
 func (o AwsIamServiceIdentityInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -104,10 +104,10 @@ func (o *AwsIamServiceIdentityInfo) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -168,5 +168,3 @@ func (v *NullableAwsIamServiceIdentityInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

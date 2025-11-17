@@ -21,8 +21,8 @@ var _ MappedNullable = &StorageConfigInfo{}
 // StorageConfigInfo A storage configuration used by catalogs
 type StorageConfigInfo struct {
 	// The cloud provider type this storage is built on. FILE is supported for testing purposes only
-	StorageType string `json:"storageType"`
-	AllowedLocations []string `json:"allowedLocations,omitempty"`
+	StorageType          string   `json:"storageType"`
+	AllowedLocations     []string `json:"allowedLocations,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -103,7 +103,7 @@ func (o *StorageConfigInfo) SetAllowedLocations(v []string) {
 }
 
 func (o StorageConfigInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -137,10 +137,10 @@ func (o *StorageConfigInfo) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -202,5 +202,3 @@ func (v *NullableStorageConfigInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

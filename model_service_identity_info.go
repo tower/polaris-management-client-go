@@ -21,7 +21,7 @@ var _ MappedNullable = &ServiceIdentityInfo{}
 // ServiceIdentityInfo Identity metadata for the Polaris service used to access external resources.
 type ServiceIdentityInfo struct {
 	// The type of identity used to access external resources
-	IdentityType string `json:"identityType"`
+	IdentityType         string `json:"identityType"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -70,7 +70,7 @@ func (o *ServiceIdentityInfo) SetIdentityType(v string) {
 }
 
 func (o ServiceIdentityInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -101,10 +101,10 @@ func (o *ServiceIdentityInfo) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -165,5 +165,3 @@ func (v *NullableServiceIdentityInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

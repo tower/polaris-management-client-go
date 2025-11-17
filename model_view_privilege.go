@@ -21,11 +21,11 @@ type ViewPrivilege string
 // List of ViewPrivilege
 const (
 	VIEWPRIVILEGE_CATALOG_MANAGE_ACCESS ViewPrivilege = "CATALOG_MANAGE_ACCESS"
-	VIEWPRIVILEGE_VIEW_DROP ViewPrivilege = "VIEW_DROP"
-	VIEWPRIVILEGE_VIEW_LIST ViewPrivilege = "VIEW_LIST"
-	VIEWPRIVILEGE_VIEW_READ_PROPERTIES ViewPrivilege = "VIEW_READ_PROPERTIES"
+	VIEWPRIVILEGE_VIEW_DROP             ViewPrivilege = "VIEW_DROP"
+	VIEWPRIVILEGE_VIEW_LIST             ViewPrivilege = "VIEW_LIST"
+	VIEWPRIVILEGE_VIEW_READ_PROPERTIES  ViewPrivilege = "VIEW_READ_PROPERTIES"
 	VIEWPRIVILEGE_VIEW_WRITE_PROPERTIES ViewPrivilege = "VIEW_WRITE_PROPERTIES"
-	VIEWPRIVILEGE_VIEW_FULL_METADATA ViewPrivilege = "VIEW_FULL_METADATA"
+	VIEWPRIVILEGE_VIEW_FULL_METADATA    ViewPrivilege = "VIEW_FULL_METADATA"
 )
 
 // All allowed values of ViewPrivilege enum
@@ -116,4 +116,3 @@ func (v *NullableViewPrivilege) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

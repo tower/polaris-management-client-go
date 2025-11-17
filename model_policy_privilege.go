@@ -21,13 +21,13 @@ type PolicyPrivilege string
 // List of PolicyPrivilege
 const (
 	POLICYPRIVILEGE_CATALOG_MANAGE_ACCESS PolicyPrivilege = "CATALOG_MANAGE_ACCESS"
-	POLICYPRIVILEGE_POLICY_READ PolicyPrivilege = "POLICY_READ"
-	POLICYPRIVILEGE_POLICY_DROP PolicyPrivilege = "POLICY_DROP"
-	POLICYPRIVILEGE_POLICY_WRITE PolicyPrivilege = "POLICY_WRITE"
-	POLICYPRIVILEGE_POLICY_LIST PolicyPrivilege = "POLICY_LIST"
-	POLICYPRIVILEGE_POLICY_FULL_METADATA PolicyPrivilege = "POLICY_FULL_METADATA"
-	POLICYPRIVILEGE_POLICY_ATTACH PolicyPrivilege = "POLICY_ATTACH"
-	POLICYPRIVILEGE_POLICY_DETACH PolicyPrivilege = "POLICY_DETACH"
+	POLICYPRIVILEGE_POLICY_READ           PolicyPrivilege = "POLICY_READ"
+	POLICYPRIVILEGE_POLICY_DROP           PolicyPrivilege = "POLICY_DROP"
+	POLICYPRIVILEGE_POLICY_WRITE          PolicyPrivilege = "POLICY_WRITE"
+	POLICYPRIVILEGE_POLICY_LIST           PolicyPrivilege = "POLICY_LIST"
+	POLICYPRIVILEGE_POLICY_FULL_METADATA  PolicyPrivilege = "POLICY_FULL_METADATA"
+	POLICYPRIVILEGE_POLICY_ATTACH         PolicyPrivilege = "POLICY_ATTACH"
+	POLICYPRIVILEGE_POLICY_DETACH         PolicyPrivilege = "POLICY_DETACH"
 )
 
 // All allowed values of PolicyPrivilege enum
@@ -120,4 +120,3 @@ func (v *NullablePolicyPrivilege) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

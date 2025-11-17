@@ -19,8 +19,8 @@ var _ MappedNullable = &PrincipalWithCredentialsCredentials{}
 
 // PrincipalWithCredentialsCredentials struct for PrincipalWithCredentialsCredentials
 type PrincipalWithCredentialsCredentials struct {
-	ClientId *string `json:"clientId,omitempty"`
-	ClientSecret *string `json:"clientSecret,omitempty"`
+	ClientId             *string `json:"clientId,omitempty"`
+	ClientSecret         *string `json:"clientSecret,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -108,7 +108,7 @@ func (o *PrincipalWithCredentialsCredentials) SetClientSecret(v string) {
 }
 
 func (o PrincipalWithCredentialsCredentials) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -188,5 +188,3 @@ func (v *NullablePrincipalWithCredentialsCredentials) UnmarshalJSON(src []byte) 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

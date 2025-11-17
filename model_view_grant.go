@@ -23,9 +23,9 @@ var _ MappedNullable = &ViewGrant{}
 // ViewGrant struct for ViewGrant
 type ViewGrant struct {
 	GrantResource
-	Namespace []string `json:"namespace"`
-	ViewName string `json:"viewName"`
-	Privilege ViewPrivilege `json:"privilege"`
+	Namespace            []string      `json:"namespace"`
+	ViewName             string        `json:"viewName"`
+	Privilege            ViewPrivilege `json:"privilege"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -125,7 +125,7 @@ func (o *ViewGrant) SetPrivilege(v ViewPrivilege) {
 }
 
 func (o ViewGrant) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -169,18 +169,18 @@ func (o *ViewGrant) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
 	}
 
 	type ViewGrantWithoutEmbeddedStruct struct {
-		Namespace []string `json:"namespace"`
-		ViewName string `json:"viewName"`
+		Namespace []string      `json:"namespace"`
+		ViewName  string        `json:"viewName"`
 		Privilege ViewPrivilege `json:"privilege"`
 	}
 
@@ -272,5 +272,3 @@ func (v *NullableViewGrant) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

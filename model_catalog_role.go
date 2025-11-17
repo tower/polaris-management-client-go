@@ -21,12 +21,12 @@ var _ MappedNullable = &CatalogRole{}
 // CatalogRole struct for CatalogRole
 type CatalogRole struct {
 	// The name of the role
-	Name string `json:"name" validate:"regexp=^(?!\\\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\\\$).*$"`
-	Properties *map[string]string `json:"properties,omitempty"`
-	CreateTimestamp *int64 `json:"createTimestamp,omitempty"`
-	LastUpdateTimestamp *int64 `json:"lastUpdateTimestamp,omitempty"`
+	Name                string             `json:"name" validate:"regexp=^(?!\\\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\\\$).*$"`
+	Properties          *map[string]string `json:"properties,omitempty"`
+	CreateTimestamp     *int64             `json:"createTimestamp,omitempty"`
+	LastUpdateTimestamp *int64             `json:"lastUpdateTimestamp,omitempty"`
 	// The version of the catalog role object used to determine if the catalog role metadata has changed
-	EntityVersion *int32 `json:"entityVersion,omitempty"`
+	EntityVersion        *int32 `json:"entityVersion,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -203,7 +203,7 @@ func (o *CatalogRole) SetEntityVersion(v int32) {
 }
 
 func (o CatalogRole) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -246,10 +246,10 @@ func (o *CatalogRole) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -314,5 +314,3 @@ func (v *NullableCatalogRole) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

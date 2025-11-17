@@ -22,7 +22,7 @@ var _ MappedNullable = &HadoopConnectionConfigInfo{}
 type HadoopConnectionConfigInfo struct {
 	ConnectionConfigInfo
 	// The file path to where this catalog should store tables
-	Warehouse *string `json:"warehouse,omitempty"`
+	Warehouse            *string `json:"warehouse,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -79,7 +79,7 @@ func (o *HadoopConnectionConfigInfo) SetWarehouse(v string) {
 }
 
 func (o HadoopConnectionConfigInfo) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -112,10 +112,10 @@ func (o *HadoopConnectionConfigInfo) UnmarshalJSON(data []byte) (err error) {
 	err = json.Unmarshal(data, &allProperties)
 
 	if err != nil {
-		return err;
+		return err
 	}
 
-	for _, requiredProperty := range(requiredProperties) {
+	for _, requiredProperty := range requiredProperties {
 		if _, exists := allProperties[requiredProperty]; !exists {
 			return fmt.Errorf("no value given for required property %v", requiredProperty)
 		}
@@ -176,5 +176,3 @@ func (v *NullableHadoopConnectionConfigInfo) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

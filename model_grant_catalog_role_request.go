@@ -19,7 +19,7 @@ var _ MappedNullable = &GrantCatalogRoleRequest{}
 
 // GrantCatalogRoleRequest struct for GrantCatalogRoleRequest
 type GrantCatalogRoleRequest struct {
-	CatalogRole *CatalogRole `json:"catalogRole,omitempty"`
+	CatalogRole          *CatalogRole `json:"catalogRole,omitempty"`
 	AdditionalProperties map[string]interface{}
 }
 
@@ -75,7 +75,7 @@ func (o *GrantCatalogRoleRequest) SetCatalogRole(v CatalogRole) {
 }
 
 func (o GrantCatalogRoleRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -151,5 +151,3 @@ func (v *NullableGrantCatalogRoleRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

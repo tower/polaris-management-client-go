@@ -22,7 +22,7 @@ type CreatePrincipalRequest struct {
 	Principal *Principal `json:"principal,omitempty"`
 	// If true, the initial credentials can only be used to call rotateCredentials
 	CredentialRotationRequired *bool `json:"credentialRotationRequired,omitempty"`
-	AdditionalProperties map[string]interface{}
+	AdditionalProperties       map[string]interface{}
 }
 
 type _CreatePrincipalRequest CreatePrincipalRequest
@@ -109,7 +109,7 @@ func (o *CreatePrincipalRequest) SetCredentialRotationRequired(v bool) {
 }
 
 func (o CreatePrincipalRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -189,5 +189,3 @@ func (v *NullableCreatePrincipalRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
