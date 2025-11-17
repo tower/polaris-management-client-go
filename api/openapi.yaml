@@ -1,0 +1,2177 @@
+openapi: 3.0.3
+info:
+  description: Defines the management APIs for using Polaris to create and manage
+    Iceberg catalogs and their principals
+  title: Polaris Management Service
+  version: 0.0.1
+servers:
+- description: Server URL when the port can be inferred from the scheme
+  url: "{scheme}://{host}/api/management/v1"
+  variables:
+    scheme:
+      default: https
+      description: "The scheme of the URI, either http or https."
+    host:
+      default: localhost
+      description: The host address for the specified server
+security:
+- OAuth2: []
+paths:
+  /catalogs:
+    get:
+      description: List all catalogs in this polaris service
+      operationId: listCatalogs
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Catalogs"
+          description: List of catalogs in the polaris service
+        "403":
+          description: The caller does not have permission to list catalog details
+    post:
+      description: Add a new Catalog
+      operationId: createCatalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCatalogRequest"
+        description: The Catalog to create
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Catalog"
+          description: Successful response
+        "403":
+          description: The caller does not have permission to create a catalog
+        "404":
+          description: The catalog does not exist
+        "409":
+          description: A catalog with the specified name already exists
+  /catalogs/{catalogName}:
+    delete:
+      description: Delete an existing catalog. The catalog must be empty.
+      operationId: deleteCatalog
+      parameters:
+      - description: The name of the catalog
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: "Success, no content"
+        "403":
+          description: The caller does not have permission to delete a catalog
+        "404":
+          description: The catalog does not exist
+    get:
+      description: Get the details of a catalog
+      operationId: getCatalog
+      parameters:
+      - description: The name of the catalog
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Catalog"
+          description: The catalog details
+        "403":
+          description: The caller does not have permission to read catalog details
+        "404":
+          description: The catalog does not exist
+    put:
+      description: Update an existing catalog
+      operationId: updateCatalog
+      parameters:
+      - description: The name of the catalog
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCatalogRequest"
+        description: The catalog details to use in the update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Catalog"
+          description: The catalog details
+        "403":
+          description: The caller does not have permission to update catalog details
+        "404":
+          description: The catalog does not exist
+        "409":
+          description: The entity version doesn't match the currentEntityVersion;
+            retry after fetching latest version
+  /principals:
+    get:
+      description: List the principals for the current catalog
+      operationId: listPrincipals
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Principals"
+          description: List of principals for this catalog
+        "403":
+          description: The caller does not have permission to list catalog admins
+        "404":
+          description: The catalog does not exist
+    post:
+      description: Create a principal
+      operationId: createPrincipal
+      requestBody:
+        content:
+          application/json:
+            example:
+              principal:
+                name: alice
+                properties:
+                  department: engineering
+              credentialRotationRequired: false
+            schema:
+              $ref: "#/components/schemas/CreatePrincipalRequest"
+        description: The principal to create
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalWithCredentials"
+          description: Successful response
+        "403":
+          description: The caller does not have permission to add a principal
+  /principals/{principalName}:
+    delete:
+      description: Remove a principal from polaris
+      operationId: deletePrincipal
+      parameters:
+      - description: The principal name
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: "Success, no content"
+        "403":
+          description: The caller does not have permission to delete a principal
+        "404":
+          description: The principal does not exist
+    get:
+      description: Get the principal details
+      operationId: getPrincipal
+      parameters:
+      - description: The principal name
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Principal"
+          description: The requested principal
+        "403":
+          description: The caller does not have permission to get principal details
+        "404":
+          description: The catalog or principal does not exist
+    put:
+      description: Update an existing principal
+      operationId: updatePrincipal
+      parameters:
+      - description: The principal name
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePrincipalRequest"
+        description: The principal details to use in the update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Principal"
+          description: The updated principal
+        "403":
+          description: The caller does not have permission to update principal details
+        "404":
+          description: The principal does not exist
+        "409":
+          description: The entity version doesn't match the currentEntityVersion;
+            retry after fetching latest version
+  /principals/{principalName}/rotate:
+    post:
+      description: "Rotate a principal's credentials. The new credentials will be\
+        \ returned in the response. This is the only API, aside from createPrincipal,\
+        \ that returns the user's credentials. This API is *not* idempotent."
+      operationId: rotateCredentials
+      parameters:
+      - description: The user name
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalWithCredentials"
+          description: The principal details along with the newly rotated credentials
+        "403":
+          description: The caller does not have permission to rotate credentials
+        "404":
+          description: The principal does not exist
+  /principals/{principalName}/reset:
+    post:
+      description: "Reset a principal's credentials to a new set. By default, the\
+        \ system generates random credentials unless explicitly allowed to accept\
+        \ user-provided credentials via configuration.   This API is *not* idempotent\
+        \ and will return the newly created credentials."
+      operationId: resetCredentials
+      parameters:
+      - description: The principal's name
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPrincipalRequest"
+        required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalWithCredentials"
+          description: The principal details along with the newly reset credentials
+        "403":
+          description: The caller does not have permission to reset credentials
+        "404":
+          description: The principal does not exist
+  /principals/{principalName}/principal-roles:
+    get:
+      description: List the roles assigned to the principal
+      operationId: listPrincipalRolesAssigned
+      parameters:
+      - description: The name of the target principal
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalRoles"
+          description: List of roles assigned to this principal
+        "403":
+          description: The caller does not have permission to list roles
+        "404":
+          description: The principal or catalog does not exist
+    put:
+      description: Add a role to the principal
+      operationId: assignPrincipalRole
+      parameters:
+      - description: The name of the target principal
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GrantPrincipalRoleRequest"
+        description: The principal role to assign
+        required: true
+      responses:
+        "201":
+          description: Successful response
+        "403":
+          description: The caller does not have permission to add assign a role to
+            the principal
+        "404":
+          description: "The catalog, the principal, or the role does not exist"
+  /principals/{principalName}/principal-roles/{principalRoleName}:
+    delete:
+      description: Remove a role from a catalog principal
+      operationId: revokePrincipalRole
+      parameters:
+      - description: The name of the target principal
+        explode: false
+        in: path
+        name: principalName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: "Success, no content"
+        "403":
+          description: The caller does not have permission to remove a role from the
+            principal
+        "404":
+          description: The catalog or principal does not exist
+  /principal-roles:
+    get:
+      description: List the principal roles
+      operationId: listPrincipalRoles
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalRoles"
+          description: List of principal roles
+        "403":
+          description: The caller does not have permission to list principal roles
+        "404":
+          description: The catalog does not exist
+    post:
+      description: Create a principal role
+      operationId: createPrincipalRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePrincipalRoleRequest"
+        description: The principal to create
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalRole"
+          description: Successful response
+        "403":
+          description: The caller does not have permission to add a principal role
+  /principal-roles/{principalRoleName}:
+    delete:
+      description: Remove a principal role from polaris
+      operationId: deletePrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: "Success, no content"
+        "403":
+          description: The caller does not have permission to delete a principal role
+        "404":
+          description: The principal role does not exist
+    get:
+      description: Get the principal role details
+      operationId: getPrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalRole"
+          description: The requested principal role
+        "403":
+          description: The caller does not have permission to get principal role details
+        "404":
+          description: The principal role does not exist
+    put:
+      description: Update an existing principalRole
+      operationId: updatePrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePrincipalRoleRequest"
+        description: The principalRole details to use in the update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalRole"
+          description: The updated principal role
+        "403":
+          description: The caller does not have permission to update principal role
+            details
+        "404":
+          description: The principal role does not exist
+        "409":
+          description: The entity version doesn't match the currentEntityVersion;
+            retry after fetching latest version
+  /principal-roles/{principalRoleName}/principals:
+    get:
+      description: List the Principals to whom the target principal role has been
+        assigned
+      operationId: listAssigneePrincipalsForPrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Principals"
+          description: List the Principals to whom the target principal role has been
+            assigned
+        "403":
+          description: The caller does not have permission to list principals
+        "404":
+          description: The principal role does not exist
+  /principal-roles/{principalRoleName}/catalog-roles/{catalogName}:
+    get:
+      description: Get the catalog roles mapped to the principal role
+      operationId: listCatalogRolesForPrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the catalog where the catalogRoles reside
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogRoles"
+          description: The list of catalog roles mapped to the principal role
+        "403":
+          description: The caller does not have permission to list catalog roles
+        "404":
+          description: The principal role does not exist
+    put:
+      description: Assign a catalog role to a principal role
+      operationId: assignCatalogRoleToPrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the catalog where the catalogRoles reside
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GrantCatalogRoleRequest"
+        description: The principal to create
+        required: true
+      responses:
+        "201":
+          description: Successful response
+        "403":
+          description: The caller does not have permission to assign a catalog role
+  /principal-roles/{principalRoleName}/catalog-roles/{catalogName}/{catalogRoleName}:
+    delete:
+      description: Remove a catalog role from a principal role
+      operationId: revokeCatalogRoleFromPrincipalRole
+      parameters:
+      - description: The principal role name
+        explode: false
+        in: path
+        name: principalRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the catalog that contains the role to revoke
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the catalog role that should be revoked
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: "Success, no content"
+        "403":
+          description: The caller does not have permission to revoke a catalog role
+        "404":
+          description: The principal role does not exist
+  /catalogs/{catalogName}/catalog-roles:
+    get:
+      description: List existing roles in the catalog
+      operationId: listCatalogRoles
+      parameters:
+      - description: The catalog for which we are reading/updating roles
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogRoles"
+          description: The list of roles that exist in this catalog
+    post:
+      description: Create a new role in the catalog
+      operationId: createCatalogRole
+      parameters:
+      - description: The catalog for which we are reading/updating roles
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCatalogRoleRequest"
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogRole"
+          description: Successful response
+        "403":
+          description: The principal is not authorized to create roles
+        "404":
+          description: The catalog does not exist
+  /catalogs/{catalogName}/catalog-roles/{catalogRoleName}:
+    delete:
+      description: Delete an existing role from the catalog. All associated grants
+        will also be deleted
+      operationId: deleteCatalogRole
+      parameters:
+      - description: The catalog for which we are retrieving roles
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: "Success, no content"
+        "403":
+          description: The principal is not authorized to delete roles
+        "404":
+          description: The catalog or the role does not exist
+    get:
+      description: Get the details of an existing role
+      operationId: getCatalogRole
+      parameters:
+      - description: The catalog for which we are retrieving roles
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogRole"
+          description: The specified role details
+        "403":
+          description: The principal is not authorized to read role data
+        "404":
+          description: The catalog or the role does not exist
+    put:
+      description: Update an existing role in the catalog
+      operationId: updateCatalogRole
+      parameters:
+      - description: The catalog for which we are retrieving roles
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCatalogRoleRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CatalogRole"
+          description: The specified role details
+        "403":
+          description: The principal is not authorized to update roles
+        "404":
+          description: The catalog or the role does not exist
+        "409":
+          description: The entity version doesn't match the currentEntityVersion;
+            retry after fetching latest version
+  /catalogs/{catalogName}/catalog-roles/{catalogRoleName}/principal-roles:
+    get:
+      description: List the PrincipalRoles to which the target catalog role has been
+        assigned
+      operationId: listAssigneePrincipalRolesForCatalogRole
+      parameters:
+      - description: The name of the catalog where the catalog role resides
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the catalog role
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrincipalRoles"
+          description: List the PrincipalRoles to which the target catalog role has
+            been assigned
+        "403":
+          description: The caller does not have permission to list principal roles
+        "404":
+          description: The catalog or catalog role does not exist
+  /catalogs/{catalogName}/catalog-roles/{catalogRoleName}/grants:
+    get:
+      description: List the grants the catalog role holds
+      operationId: listGrantsForCatalogRole
+      parameters:
+      - description: The name of the catalog where the role will receive the grant
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role receiving the grant (must exist)
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GrantResources"
+          description: List of all grants given to the role in this catalog
+    post:
+      description: "Delete a specific grant from the role. This may be a subset or\
+        \ a superset of the grants the role has. In case of a subset, the role will\
+        \ retain the grants not specified. If the `cascade` parameter is true, grant\
+        \ revocation will have a cascading effect - that is, if a principal has specific\
+        \ grants on a subresource, and grants are revoked on a parent resource, the\
+        \ grants present on the subresource will be revoked as well. By default, this\
+        \ behavior is disabled and grant revocation only affects the specified resource."
+      operationId: revokeGrantFromCatalogRole
+      parameters:
+      - description: The name of the catalog where the role will receive the grant
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role receiving the grant (must exist)
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: "If true, the grant revocation cascades to all subresources."
+        explode: true
+        in: query
+        name: cascade
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RevokeGrantRequest"
+      responses:
+        "201":
+          description: Successful response
+        "403":
+          description: The principal is not authorized to create grants
+        "404":
+          description: The catalog or the role does not exist
+    put:
+      description: Add a new grant to the catalog role
+      operationId: addGrantToCatalogRole
+      parameters:
+      - description: The name of the catalog where the role will receive the grant
+        explode: false
+        in: path
+        name: catalogName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      - description: The name of the role receiving the grant (must exist)
+        explode: false
+        in: path
+        name: catalogRoleName
+        required: true
+        schema:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddGrantRequest"
+      responses:
+        "201":
+          description: Successful response
+        "403":
+          description: The principal is not authorized to create grants
+        "404":
+          description: The catalog or the role does not exist
+components:
+  schemas:
+    Catalogs:
+      description: A list of Catalog objects
+      example:
+        catalogs:
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          type: INTERNAL
+          properties:
+            default-base-location: default-base-location
+          createTimestamp: 0
+          storageConfigInfo:
+            storageType: S3
+            allowedLocations: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+              \ for GCP [gs://bucketname/prefix/]"
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          type: INTERNAL
+          properties:
+            default-base-location: default-base-location
+          createTimestamp: 0
+          storageConfigInfo:
+            storageType: S3
+            allowedLocations: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+              \ for GCP [gs://bucketname/prefix/]"
+      properties:
+        catalogs:
+          items:
+            $ref: "#/components/schemas/Catalog"
+          type: array
+      required:
+      - catalogs
+      type: object
+    CreateCatalogRequest:
+      description: Request to create a new catalog
+      example:
+        catalog:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          type: INTERNAL
+          properties:
+            default-base-location: default-base-location
+          createTimestamp: 0
+          storageConfigInfo:
+            storageType: S3
+            allowedLocations: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+              \ for GCP [gs://bucketname/prefix/]"
+      properties:
+        catalog:
+          $ref: "#/components/schemas/Catalog"
+      required:
+      - catalog
+      type: object
+    Catalog:
+      description: A catalog object. A catalog may be internal or external. External
+        catalogs are managed entirely by an external catalog interface. Third party
+        catalogs may be other Iceberg REST implementations or other services with
+        their own proprietary APIs
+      discriminator:
+        mapping:
+          INTERNAL: "#/components/schemas/PolarisCatalog"
+          EXTERNAL: "#/components/schemas/ExternalCatalog"
+        propertyName: type
+      example:
+        entityVersion: 1
+        lastUpdateTimestamp: 6
+        name: name
+        type: INTERNAL
+        properties:
+          default-base-location: default-base-location
+        createTimestamp: 0
+        storageConfigInfo:
+          storageType: S3
+          allowedLocations: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+            \ for GCP [gs://bucketname/prefix/]"
+      properties:
+        type:
+          default: INTERNAL
+          description: the type of catalog - internal or external
+          enum:
+          - INTERNAL
+          - EXTERNAL
+          type: string
+        name:
+          description: The name of the catalog
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        properties:
+          $ref: "#/components/schemas/Catalog_properties"
+        createTimestamp:
+          description: The creation time represented as unix epoch timestamp in milliseconds
+          format: int64
+          type: integer
+        lastUpdateTimestamp:
+          description: The last update time represented as unix epoch timestamp in
+            milliseconds
+          format: int64
+          type: integer
+        entityVersion:
+          description: The version of the catalog object used to determine if the
+            catalog metadata has changed
+          type: integer
+        storageConfigInfo:
+          $ref: "#/components/schemas/StorageConfigInfo"
+      required:
+      - name
+      - properties
+      - storageConfigInfo
+      - type
+      type: object
+    PolarisCatalog:
+      allOf:
+      - $ref: "#/components/schemas/Catalog"
+      description: The base catalog type - this contains all the fields necessary
+        to construct an INTERNAL catalog
+      type: object
+    ExternalCatalog:
+      allOf:
+      - $ref: "#/components/schemas/Catalog"
+      - properties:
+          connectionConfigInfo:
+            $ref: "#/components/schemas/ConnectionConfigInfo"
+        type: object
+      description: An externally managed catalog
+      type: object
+    ConnectionConfigInfo:
+      description: A connection configuration representing a remote catalog service.
+        IMPORTANT - Specifying a ConnectionConfigInfo in an ExternalCatalog is currently
+        an experimental API and is subject to change.
+      discriminator:
+        mapping:
+          ICEBERG_REST: "#/components/schemas/IcebergRestConnectionConfigInfo"
+          HADOOP: "#/components/schemas/HadoopConnectionConfigInfo"
+          HIVE: "#/components/schemas/HiveConnectionConfigInfo"
+        propertyName: connectionType
+      properties:
+        connectionType:
+          description: The type of remote catalog service represented by this connection
+          enum:
+          - ICEBERG_REST
+          - HADOOP
+          - HIVE
+          type: string
+        uri:
+          description: URI to the remote catalog service
+          type: string
+        authenticationParameters:
+          $ref: "#/components/schemas/AuthenticationParameters"
+        serviceIdentity:
+          $ref: "#/components/schemas/ServiceIdentityInfo"
+      required:
+      - connectionType
+      type: object
+    IcebergRestConnectionConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/ConnectionConfigInfo"
+      - description: Configuration necessary for connecting to an Iceberg REST Catalog
+        properties:
+          remoteCatalogName:
+            description: "The name of a remote catalog instance within the remote\
+              \ catalog service; in some older systems this is specified as the 'warehouse'\
+              \ when multiple logical catalogs are served under the same base uri,\
+              \ and often translates into a 'prefix' added to all REST resource paths"
+            type: string
+        type: object
+        example: null
+      type: object
+      example: null
+    HadoopConnectionConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/ConnectionConfigInfo"
+      - description: Configuration necessary for connecting to a Hadoop Catalog
+        properties:
+          warehouse:
+            description: The file path to where this catalog should store tables
+            type: string
+        type: object
+        example: null
+      type: object
+      example: null
+    HiveConnectionConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/ConnectionConfigInfo"
+      - description: Configuration necessary for connecting to a Hive Catalog
+        properties:
+          warehouse:
+            description: The warehouse location for the hive catalog.
+            type: string
+        type: object
+        example: null
+      type: object
+      example: null
+    AuthenticationParameters:
+      description: Authentication-specific information for a connection
+      discriminator:
+        mapping:
+          OAUTH: "#/components/schemas/OAuthClientCredentialsParameters"
+          BEARER: "#/components/schemas/BearerAuthenticationParameters"
+          SIGV4: "#/components/schemas/SigV4AuthenticationParameters"
+          IMPLICIT: "#/components/schemas/ImplicitAuthenticationParameters"
+        propertyName: authenticationType
+      properties:
+        authenticationType:
+          description: The type of authentication to use when connecting to the remote
+            rest service
+          enum:
+          - OAUTH
+          - BEARER
+          - SIGV4
+          - IMPLICIT
+          type: string
+      required:
+      - authenticationType
+      type: object
+    OAuthClientCredentialsParameters:
+      allOf:
+      - $ref: "#/components/schemas/AuthenticationParameters"
+      - description: OAuth authentication based on client_id/client_secret
+        properties:
+          tokenUri:
+            description: Token server URI
+            type: string
+          clientId:
+            description: oauth client id
+            type: string
+          clientSecret:
+            description: oauth client secret (input-only)
+            format: password
+            type: string
+          scopes:
+            description: oauth scopes to specify when exchanging for a short-lived
+              access token
+            items:
+              type: string
+            type: array
+        type: object
+        example: null
+      type: object
+      example: null
+    BearerAuthenticationParameters:
+      allOf:
+      - $ref: "#/components/schemas/AuthenticationParameters"
+      - description: Bearer authentication directly embedded in request auth headers
+        properties:
+          bearerToken:
+            description: Bearer token (input-only)
+            format: password
+            type: string
+        type: object
+        example: null
+      type: object
+      example: null
+    SigV4AuthenticationParameters:
+      allOf:
+      - $ref: "#/components/schemas/AuthenticationParameters"
+      - description: AWS Signature Version 4 authentication
+        properties:
+          roleArn:
+            description: The aws IAM role arn assumed by polaris userArn when signing
+              requests
+            example: arn:aws:iam::123456789001:role/role-that-has-remote-catalog-access
+            type: string
+          roleSessionName:
+            description: The role session name to be used by the SigV4 protocol for
+              signing requests
+            example: polaris-remote-catalog-access
+            type: string
+          externalId:
+            description: An optional external id used to establish a trust relationship
+              with AWS in the trust policy
+            example: external-id-1234
+            type: string
+          signingRegion:
+            description: Region to be used by the SigV4 protocol for signing requests
+            example: us-west-2
+            type: string
+          signingName:
+            description: "The service name to be used by the SigV4 protocol for signing\
+              \ requests, the default signing name is \"execute-api\" is if not provided"
+            example: glue
+            type: string
+        required:
+        - roleArn
+        - signingRegion
+        type: object
+        example: null
+      type: object
+      example: null
+    ImplicitAuthenticationParameters:
+      allOf:
+      - $ref: "#/components/schemas/AuthenticationParameters"
+      description: Polaris does not explicitly accept any authentication parameters
+        for the connection. Authentication parameters found in the environment and/or
+        configuration files will be used for this connection.
+      type: object
+    StorageConfigInfo:
+      description: A storage configuration used by catalogs
+      discriminator:
+        mapping:
+          S3: "#/components/schemas/AwsStorageConfigInfo"
+          AZURE: "#/components/schemas/AzureStorageConfigInfo"
+          GCS: "#/components/schemas/GcpStorageConfigInfo"
+          FILE: "#/components/schemas/FileStorageConfigInfo"
+        propertyName: storageType
+      example:
+        storageType: S3
+        allowedLocations: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+          \ for GCP [gs://bucketname/prefix/]"
+      properties:
+        storageType:
+          description: The cloud provider type this storage is built on. FILE is supported
+            for testing purposes only
+          enum:
+          - S3
+          - GCS
+          - AZURE
+          - FILE
+          type: string
+        allowedLocations:
+          example: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+            \ for GCP [gs://bucketname/prefix/]"
+          items:
+            type: string
+          type: array
+      required:
+      - storageType
+      type: object
+    AwsStorageConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/StorageConfigInfo"
+      - properties:
+          roleArn:
+            description: the aws role arn that grants privileges on the S3 buckets
+            example: arn:aws:iam::123456789001:principal/abc1-b-self1234
+            type: string
+          externalId:
+            description: an optional external id used to establish a trust relationship
+              with AWS in the trust policy
+            type: string
+          userArn:
+            description: the aws user arn used to assume the aws role
+            example: arn:aws:iam::123456789001:user/abc1-b-self1234
+            type: string
+          region:
+            description: the aws region where data is stored
+            example: us-east-2
+            type: string
+          endpoint:
+            description: endpoint for S3 requests (optional). Clients always see this
+              value (if it is set). Polaris Servers may be configured to use a different
+              endpoint URI via the `endpointInternal` property.
+            example: https://s3.example.com:1234
+            type: string
+          stsEndpoint:
+            description: "endpoint for STS requests made by the Polaris Server (optional).\
+              \ If not set, defaults to 'endpointInternal' (which in turn defaults\
+              \ to `endpoint`)."
+            example: https://sts.example.com:1234
+            type: string
+          stsUnavailable:
+            description: "if set to `true`, instructs Polaris Servers to avoid using\
+              \ the STS endpoints when obtaining credentials for accessing data and\
+              \ metadata files within the related catalog. Setting this property to\
+              \ `true` effectively disables vending storage credentials to clients.\
+              \ This setting is intended for configuring catalogs with S3-compatible\
+              \ storage implementations that do not support STS."
+            type: boolean
+          endpointInternal:
+            description: "endpoint for S3 requests made by the Polaris Server (optional).\
+              \ If set, Polaris Service will use this value instead of `endpoint`.\
+              \ If not set, defaults to `endpoint`. Iceberg REST API clients never\
+              \ see this value."
+            example: https://s3.internal.example.com:1234
+            type: string
+          pathStyleAccess:
+            default: false
+            description: Whether S3 requests to files in this catalog should use 'path-style
+              addressing for buckets'.
+            example: true
+            type: boolean
+        type: object
+      description: aws storage configuration info
+      type: object
+    AzureStorageConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/StorageConfigInfo"
+      - properties:
+          tenantId:
+            description: the tenant id that the storage accounts belong to
+            type: string
+          multiTenantAppName:
+            description: the name of the azure client application
+            type: string
+          consentUrl:
+            description: URL to the Azure permissions request page
+            type: string
+        required:
+        - tenantId
+        type: object
+      description: azure storage configuration info
+      type: object
+    GcpStorageConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/StorageConfigInfo"
+      - properties:
+          gcsServiceAccount:
+            description: a Google cloud storage service account
+            type: string
+        type: object
+      description: gcp storage configuration info
+      type: object
+    FileStorageConfigInfo:
+      allOf:
+      - $ref: "#/components/schemas/StorageConfigInfo"
+      description: file storage configuration info
+      type: object
+    ServiceIdentityInfo:
+      description: Identity metadata for the Polaris service used to access external
+        resources.
+      discriminator:
+        mapping:
+          AWS_IAM: "#/components/schemas/AwsIamServiceIdentityInfo"
+        propertyName: identityType
+      properties:
+        identityType:
+          description: The type of identity used to access external resources
+          enum:
+          - AWS_IAM
+          type: string
+      readOnly: true
+      required:
+      - identityType
+      type: object
+    AwsIamServiceIdentityInfo:
+      allOf:
+      - $ref: "#/components/schemas/ServiceIdentityInfo"
+      - properties:
+          iamArn:
+            description: The ARN of the IAM user or IAM role Polaris uses to assume
+              roles and then access external resources.
+            example: arn:aws:iam::111122223333:user/polaris-service-user
+            type: string
+        required:
+        - iamArn
+        type: object
+        example: null
+      type: object
+      example: null
+    UpdateCatalogRequest:
+      description: Updates to apply to a Catalog. Any fields which are required in
+        the Catalog will remain unaltered if omitted from the contents of this Update
+        request.
+      example:
+        currentEntityVersion: 0
+        properties:
+          key: properties
+        storageConfigInfo:
+          storageType: S3
+          allowedLocations: "For AWS [s3://bucketname/prefix/], for AZURE [abfss://container@storageaccount.blob.core.windows.net/prefix/],\
+            \ for GCP [gs://bucketname/prefix/]"
+      properties:
+        currentEntityVersion:
+          description: "The version of the object onto which this update is applied;\
+            \ if the object changed, the update will fail and the caller should retry\
+            \ after fetching the latest version."
+          type: integer
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        storageConfigInfo:
+          $ref: "#/components/schemas/StorageConfigInfo"
+      type: object
+    Principals:
+      description: A list of Principals
+      example:
+        principals:
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          clientId: clientId
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          clientId: clientId
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        principals:
+          items:
+            $ref: "#/components/schemas/Principal"
+          type: array
+      required:
+      - principals
+      type: object
+    PrincipalWithCredentials:
+      description: A user with its client id and secret. This type is returned when
+        a new principal is created or when its credentials are rotated
+      example:
+        principal:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          clientId: clientId
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+        credentials:
+          clientId: clientId
+          clientSecret: clientSecret
+      properties:
+        principal:
+          $ref: "#/components/schemas/Principal"
+        credentials:
+          $ref: "#/components/schemas/PrincipalWithCredentials_credentials"
+      required:
+      - credentials
+      - principal
+      type: object
+    CreatePrincipalRequest:
+      example:
+        principal:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          clientId: clientId
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+        credentialRotationRequired: true
+      properties:
+        principal:
+          $ref: "#/components/schemas/Principal"
+        credentialRotationRequired:
+          description: "If true, the initial credentials can only be used to call\
+            \ rotateCredentials"
+          type: boolean
+      type: object
+    Principal:
+      description: A Polaris principal.
+      example:
+        entityVersion: 1
+        lastUpdateTimestamp: 6
+        clientId: clientId
+        name: name
+        properties:
+          key: properties
+        createTimestamp: 0
+      properties:
+        name:
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        clientId:
+          description: The output-only OAuth clientId associated with this principal
+            if applicable
+          type: string
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        createTimestamp:
+          format: int64
+          type: integer
+        lastUpdateTimestamp:
+          format: int64
+          type: integer
+        entityVersion:
+          description: The version of the principal object used to determine if the
+            principal metadata has changed
+          type: integer
+      required:
+      - name
+      type: object
+    UpdatePrincipalRequest:
+      description: Updates to apply to a Principal
+      example:
+        currentEntityVersion: 0
+        properties:
+          key: properties
+      properties:
+        currentEntityVersion:
+          description: "The version of the object onto which this update is applied;\
+            \ if the object changed, the update will fail and the caller should retry\
+            \ after fetching the latest version."
+          type: integer
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+      - currentEntityVersion
+      - properties
+      type: object
+    ResetPrincipalRequest:
+      example:
+        clientId: clientId
+        clientSecret: clientSecret
+      properties:
+        clientId:
+          description: |
+            Optional client ID to set for the principal. Must be a valid client ID previously generated by this service.
+          type: string
+        clientSecret:
+          description: |
+            Optional client secret to set for the principal. Polaris service implementations may impose extra requirements on what is accepted as a secret (special chars, length, etc.)
+          type: string
+      type: object
+    PrincipalRoles:
+      example:
+        roles:
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          federated: false
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          federated: false
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        roles:
+          items:
+            $ref: "#/components/schemas/PrincipalRole"
+          type: array
+      required:
+      - roles
+      type: object
+    GrantPrincipalRoleRequest:
+      example:
+        principalRole:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          federated: false
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        principalRole:
+          $ref: "#/components/schemas/PrincipalRole"
+      type: object
+    CreatePrincipalRoleRequest:
+      example:
+        principalRole:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          federated: false
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        principalRole:
+          $ref: "#/components/schemas/PrincipalRole"
+      type: object
+    PrincipalRole:
+      example:
+        entityVersion: 1
+        lastUpdateTimestamp: 6
+        federated: false
+        name: name
+        properties:
+          key: properties
+        createTimestamp: 0
+      properties:
+        name:
+          description: The name of the role
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        federated:
+          default: false
+          description: "Whether the principal role is a federated role (that is, managed\
+            \ by an external identity provider)"
+          type: boolean
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        createTimestamp:
+          format: int64
+          type: integer
+        lastUpdateTimestamp:
+          format: int64
+          type: integer
+        entityVersion:
+          description: The version of the principal role object used to determine
+            if the principal role metadata has changed
+          type: integer
+      required:
+      - name
+      type: object
+    UpdatePrincipalRoleRequest:
+      description: Updates to apply to a Principal Role
+      example:
+        currentEntityVersion: 0
+        properties:
+          key: properties
+      properties:
+        currentEntityVersion:
+          description: "The version of the object onto which this update is applied;\
+            \ if the object changed, the update will fail and the caller should retry\
+            \ after fetching the latest version."
+          type: integer
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+      - currentEntityVersion
+      - properties
+      type: object
+    CatalogRoles:
+      example:
+        roles:
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+        - entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        roles:
+          description: The list of catalog roles
+          items:
+            $ref: "#/components/schemas/CatalogRole"
+          type: array
+      required:
+      - roles
+      type: object
+    GrantCatalogRoleRequest:
+      example:
+        catalogRole:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        catalogRole:
+          $ref: "#/components/schemas/CatalogRole"
+      type: object
+    CreateCatalogRoleRequest:
+      example:
+        catalogRole:
+          entityVersion: 1
+          lastUpdateTimestamp: 6
+          name: name
+          properties:
+            key: properties
+          createTimestamp: 0
+      properties:
+        catalogRole:
+          $ref: "#/components/schemas/CatalogRole"
+      type: object
+    CatalogRole:
+      example:
+        entityVersion: 1
+        lastUpdateTimestamp: 6
+        name: name
+        properties:
+          key: properties
+        createTimestamp: 0
+      properties:
+        name:
+          description: The name of the role
+          maxLength: 256
+          minLength: 1
+          pattern: "^(?!\\s*[s|S][y|Y][s|S][t|T][e|E][m|M]\\$).*$"
+          type: string
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+        createTimestamp:
+          format: int64
+          type: integer
+        lastUpdateTimestamp:
+          format: int64
+          type: integer
+        entityVersion:
+          description: The version of the catalog role object used to determine if
+            the catalog role metadata has changed
+          type: integer
+      required:
+      - name
+      type: object
+    UpdateCatalogRoleRequest:
+      description: Updates to apply to a Catalog Role
+      example:
+        currentEntityVersion: 0
+        properties:
+          key: properties
+      properties:
+        currentEntityVersion:
+          description: "The version of the object onto which this update is applied;\
+            \ if the object changed, the update will fail and the caller should retry\
+            \ after fetching the latest version."
+          type: integer
+        properties:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+      - currentEntityVersion
+      - properties
+      type: object
+    ViewPrivilege:
+      enum:
+      - CATALOG_MANAGE_ACCESS
+      - VIEW_DROP
+      - VIEW_LIST
+      - VIEW_READ_PROPERTIES
+      - VIEW_WRITE_PROPERTIES
+      - VIEW_FULL_METADATA
+      type: string
+    TablePrivilege:
+      enum:
+      - CATALOG_MANAGE_ACCESS
+      - TABLE_DROP
+      - TABLE_LIST
+      - TABLE_READ_PROPERTIES
+      - TABLE_WRITE_PROPERTIES
+      - TABLE_READ_DATA
+      - TABLE_WRITE_DATA
+      - TABLE_FULL_METADATA
+      - TABLE_ATTACH_POLICY
+      - TABLE_DETACH_POLICY
+      - TABLE_ASSIGN_UUID
+      - TABLE_UPGRADE_FORMAT_VERSION
+      - TABLE_ADD_SCHEMA
+      - TABLE_SET_CURRENT_SCHEMA
+      - TABLE_ADD_PARTITION_SPEC
+      - TABLE_ADD_SORT_ORDER
+      - TABLE_SET_DEFAULT_SORT_ORDER
+      - TABLE_ADD_SNAPSHOT
+      - TABLE_SET_SNAPSHOT_REF
+      - TABLE_REMOVE_SNAPSHOTS
+      - TABLE_REMOVE_SNAPSHOT_REF
+      - TABLE_SET_LOCATION
+      - TABLE_SET_PROPERTIES
+      - TABLE_REMOVE_PROPERTIES
+      - TABLE_SET_STATISTICS
+      - TABLE_REMOVE_STATISTICS
+      - TABLE_REMOVE_PARTITION_SPECS
+      - TABLE_MANAGE_STRUCTURE
+      type: string
+    PolicyPrivilege:
+      enum:
+      - CATALOG_MANAGE_ACCESS
+      - POLICY_READ
+      - POLICY_DROP
+      - POLICY_WRITE
+      - POLICY_LIST
+      - POLICY_FULL_METADATA
+      - POLICY_ATTACH
+      - POLICY_DETACH
+      type: string
+    NamespacePrivilege:
+      enum:
+      - CATALOG_MANAGE_ACCESS
+      - CATALOG_MANAGE_CONTENT
+      - CATALOG_MANAGE_METADATA
+      - NAMESPACE_CREATE
+      - TABLE_CREATE
+      - VIEW_CREATE
+      - NAMESPACE_DROP
+      - TABLE_DROP
+      - VIEW_DROP
+      - NAMESPACE_LIST
+      - TABLE_LIST
+      - VIEW_LIST
+      - NAMESPACE_READ_PROPERTIES
+      - TABLE_READ_PROPERTIES
+      - VIEW_READ_PROPERTIES
+      - NAMESPACE_WRITE_PROPERTIES
+      - TABLE_WRITE_PROPERTIES
+      - VIEW_WRITE_PROPERTIES
+      - TABLE_READ_DATA
+      - TABLE_WRITE_DATA
+      - NAMESPACE_FULL_METADATA
+      - TABLE_FULL_METADATA
+      - VIEW_FULL_METADATA
+      - POLICY_CREATE
+      - POLICY_WRITE
+      - POLICY_READ
+      - POLICY_DROP
+      - POLICY_LIST
+      - POLICY_FULL_METADATA
+      - NAMESPACE_ATTACH_POLICY
+      - NAMESPACE_DETACH_POLICY
+      - TABLE_ASSIGN_UUID
+      - TABLE_UPGRADE_FORMAT_VERSION
+      - TABLE_ADD_SCHEMA
+      - TABLE_SET_CURRENT_SCHEMA
+      - TABLE_ADD_PARTITION_SPEC
+      - TABLE_ADD_SORT_ORDER
+      - TABLE_SET_DEFAULT_SORT_ORDER
+      - TABLE_ADD_SNAPSHOT
+      - TABLE_SET_SNAPSHOT_REF
+      - TABLE_REMOVE_SNAPSHOTS
+      - TABLE_REMOVE_SNAPSHOT_REF
+      - TABLE_SET_LOCATION
+      - TABLE_SET_PROPERTIES
+      - TABLE_REMOVE_PROPERTIES
+      - TABLE_SET_STATISTICS
+      - TABLE_REMOVE_STATISTICS
+      - TABLE_REMOVE_PARTITION_SPECS
+      - TABLE_MANAGE_STRUCTURE
+      type: string
+    CatalogPrivilege:
+      enum:
+      - CATALOG_MANAGE_ACCESS
+      - CATALOG_MANAGE_CONTENT
+      - CATALOG_MANAGE_METADATA
+      - CATALOG_READ_PROPERTIES
+      - CATALOG_WRITE_PROPERTIES
+      - NAMESPACE_CREATE
+      - TABLE_CREATE
+      - VIEW_CREATE
+      - NAMESPACE_DROP
+      - TABLE_DROP
+      - VIEW_DROP
+      - NAMESPACE_LIST
+      - TABLE_LIST
+      - VIEW_LIST
+      - NAMESPACE_READ_PROPERTIES
+      - TABLE_READ_PROPERTIES
+      - VIEW_READ_PROPERTIES
+      - NAMESPACE_WRITE_PROPERTIES
+      - TABLE_WRITE_PROPERTIES
+      - VIEW_WRITE_PROPERTIES
+      - TABLE_READ_DATA
+      - TABLE_WRITE_DATA
+      - NAMESPACE_FULL_METADATA
+      - TABLE_FULL_METADATA
+      - VIEW_FULL_METADATA
+      - POLICY_CREATE
+      - POLICY_WRITE
+      - POLICY_READ
+      - POLICY_DROP
+      - POLICY_LIST
+      - POLICY_FULL_METADATA
+      - CATALOG_ATTACH_POLICY
+      - CATALOG_DETACH_POLICY
+      - TABLE_ASSIGN_UUID
+      - TABLE_UPGRADE_FORMAT_VERSION
+      - TABLE_ADD_SCHEMA
+      - TABLE_SET_CURRENT_SCHEMA
+      - TABLE_ADD_PARTITION_SPEC
+      - TABLE_ADD_SORT_ORDER
+      - TABLE_SET_DEFAULT_SORT_ORDER
+      - TABLE_ADD_SNAPSHOT
+      - TABLE_SET_SNAPSHOT_REF
+      - TABLE_REMOVE_SNAPSHOTS
+      - TABLE_REMOVE_SNAPSHOT_REF
+      - TABLE_SET_LOCATION
+      - TABLE_SET_PROPERTIES
+      - TABLE_REMOVE_PROPERTIES
+      - TABLE_SET_STATISTICS
+      - TABLE_REMOVE_STATISTICS
+      - TABLE_REMOVE_PARTITION_SPECS
+      - TABLE_MANAGE_STRUCTURE
+      type: string
+    AddGrantRequest:
+      example:
+        grant:
+          type: catalog
+      properties:
+        grant:
+          $ref: "#/components/schemas/GrantResource"
+      type: object
+    RevokeGrantRequest:
+      example:
+        grant:
+          type: catalog
+      properties:
+        grant:
+          $ref: "#/components/schemas/GrantResource"
+      type: object
+    ViewGrant:
+      allOf:
+      - $ref: "#/components/schemas/GrantResource"
+      - properties:
+          namespace:
+            items:
+              type: string
+            type: array
+          viewName:
+            maxLength: 256
+            minLength: 1
+            type: string
+          privilege:
+            $ref: "#/components/schemas/ViewPrivilege"
+        required:
+        - namespace
+        - privilege
+        - viewName
+        type: object
+    TableGrant:
+      allOf:
+      - $ref: "#/components/schemas/GrantResource"
+      - properties:
+          namespace:
+            items:
+              type: string
+            type: array
+          tableName:
+            maxLength: 256
+            minLength: 1
+            type: string
+          privilege:
+            $ref: "#/components/schemas/TablePrivilege"
+        required:
+        - namespace
+        - privilege
+        - tableName
+        type: object
+    PolicyGrant:
+      allOf:
+      - $ref: "#/components/schemas/GrantResource"
+      - properties:
+          namespace:
+            items:
+              type: string
+            type: array
+          policyName:
+            type: string
+          privilege:
+            $ref: "#/components/schemas/PolicyPrivilege"
+        required:
+        - namespace
+        - policyName
+        - privilege
+        type: object
+    NamespaceGrant:
+      allOf:
+      - $ref: "#/components/schemas/GrantResource"
+      - properties:
+          namespace:
+            items:
+              type: string
+            type: array
+          privilege:
+            $ref: "#/components/schemas/NamespacePrivilege"
+        required:
+        - namespace
+        - privilege
+        type: object
+    CatalogGrant:
+      allOf:
+      - $ref: "#/components/schemas/GrantResource"
+      - properties:
+          privilege:
+            $ref: "#/components/schemas/CatalogPrivilege"
+        required:
+        - privilege
+        type: object
+    GrantResource:
+      discriminator:
+        mapping:
+          catalog: "#/components/schemas/CatalogGrant"
+          namespace: "#/components/schemas/NamespaceGrant"
+          table: "#/components/schemas/TableGrant"
+          view: "#/components/schemas/ViewGrant"
+          policy: "#/components/schemas/PolicyGrant"
+        propertyName: type
+      example:
+        type: catalog
+      properties:
+        type:
+          enum:
+          - catalog
+          - namespace
+          - table
+          - view
+          - policy
+          type: string
+      required:
+      - type
+      type: object
+    GrantResources:
+      example:
+        grants:
+        - type: catalog
+        - type: catalog
+      properties:
+        grants:
+          items:
+            $ref: "#/components/schemas/GrantResource"
+          type: array
+      required:
+      - grants
+      type: object
+    Catalog_properties:
+      additionalProperties:
+        type: string
+      example:
+        default-base-location: default-base-location
+      properties:
+        default-base-location:
+          type: string
+      required:
+      - default-base-location
+      type: object
+    PrincipalWithCredentials_credentials:
+      example:
+        clientId: clientId
+        clientSecret: clientSecret
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          format: password
+          type: string
+      type: object
+  securitySchemes:
+    OAuth2:
+      description: Uses OAuth 2 with client credentials flow
+      flows:
+        implicit:
+          authorizationUrl: "{scheme}://{host}/api/v1/oauth/tokens"
+          scopes: {}
+      type: oauth2
