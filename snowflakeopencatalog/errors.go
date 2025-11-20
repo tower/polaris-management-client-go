@@ -22,6 +22,7 @@ var (
 	ErrFailedToCreateCatalog        = errors.New("snowflakeopencatalog: failed to create catalog")
 	ErrFailedToGetCatalog           = errors.New("snowflakeopencatalog: failed to get catalog")
 	ErrFailedToDeleteCatalog        = errors.New("snowflakeopencatalog: failed to delete catalog")
+	ErrCatalogNotEmpty              = errors.New("snowflakeopencatalog: catalog is not empty")
 	ErrFailedToListPrincipals       = errors.New("snowflakeopencatalog: failed to list principals")
 	ErrFailedToCreatePrincipal      = errors.New("snowflakeopencatalog: failed to create principal")
 	ErrFailedToGetPrincipal         = errors.New("snowflakeopencatalog: failed to get principal")

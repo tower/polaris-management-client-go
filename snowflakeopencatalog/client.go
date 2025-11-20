@@ -183,6 +183,20 @@ func (c *Client) DeleteCatalog(ctx context.Context, catalogName string) error {
 	httpResp, err := c.apiClient.DefaultAPI.DeleteCatalog(ctx, catalogName).Execute()
 	if err != nil {
 		logAPIError(ctx, err, fmt.Sprintf("delete catalog: %s", catalogName))
+
+		// Check if the error is due to catalog not being empty to return a specific error.
+		// Snowflake OpenCatalog returns: "Catalog '...' cannot be dropped, it is not empty"
+		if apiErr, ok := err.(*polarismgmt.GenericOpenAPIError); ok {
+			body := apiErr.Body()
+			errMsg := strings.ToLower(string(body))
+
+			// Check for "not empty" error message from Polaris
+			if strings.Contains(errMsg, "not empty") || strings.Contains(errMsg, "cannot be dropped") {
+				logger.WithContext(ctx).Error("catalog is not empty - must delete all tables/namespaces first")
+				return ErrCatalogNotEmpty
+			}
+		}
+
 		return ErrFailedToDeleteCatalog
 	}
 	defer httpResp.Body.Close()
